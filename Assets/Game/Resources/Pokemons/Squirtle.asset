@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 570c95c1c1fe24549867fcb4da6a678b, type: 3}
+  m_Name: Squirtle
+  m_EditorClassIdentifier: 
+  pokemonName: Squirtle
+  description: 
+  front: {fileID: 21300000, guid: 514c798e990f74438bd9f083b703afdf, type: 3}
+  back: {fileID: 21300000, guid: 4c8386281783142e98d6835716471829, type: 3}
+  mainType: 3
+  secondaryType: 0
+  maxHp: 44
+  attack: 48
+  defence: 65
+  specialAttack: 50
+  specialDefence: 64
+  speed: 43
+  learnableFightMoves:
+  - baseFightMoves: {fileID: 11400000, guid: 08ab8790029594209974cdc0662ec7aa, type: 2}
+    level: 1
+  - baseFightMoves: {fileID: 11400000, guid: 9640528ba45fd4a5584a4177f9180efb, type: 2}
+    level: 4
+  - baseFightMoves: {fileID: 11400000, guid: c138d24f0b21648d58f285130fbef247, type: 2}
+    level: 7
+  - baseFightMoves: {fileID: 11400000, guid: 598b280c82b1540f887cc10490db556a, type: 2}
+    level: 10
