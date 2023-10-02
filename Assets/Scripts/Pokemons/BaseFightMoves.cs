@@ -20,5 +20,8 @@ public class BaseFightMoves : ScriptableObject
     public int Power { get { return power; } }
     public int Accuracy { get { return accuracy; } }
     public int PP { get { return pp; } }
-
+    public bool IsSpecial()
+    {
+        return type == PokemonType.Dragon || type == PokemonType.Fire || type == PokemonType.Ice || type == PokemonType.Water || type == PokemonType.Electric || type == PokemonType.Grass;
+    }
 }

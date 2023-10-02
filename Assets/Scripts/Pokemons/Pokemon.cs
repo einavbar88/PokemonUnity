@@ -2,21 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+
 public class Pokemon
 {
-    public Base PokemonBase { get; set; }
-    public int Level { get; set; }
+
+    [SerializeField] Base pokemonBase;
+    [SerializeField] int level;
+
+    public Base PokemonBase { get { return pokemonBase; } }
+    public int Level { get { return level; } }
     public int HP { get; set; }
     public List<FightMove> FightMoves { get; set; }
 
-    public Pokemon(Base pokemonBase, int level)
+    public void Init()
     {
-        PokemonBase = pokemonBase;
-        Level = level;
         HP = GetMaxHp();
 
         FightMoves = new List<FightMove>();
-        foreach (var learnablefightMove in pokemonBase.LearnableFightMoves)
+        foreach (var learnablefightMove in PokemonBase.LearnableFightMoves)
         {
             if (learnablefightMove.Level <= level)
             {
@@ -36,13 +40,13 @@ public class Pokemon
         return PokemonBase.Name;
     }
 
-    public int GetAttack(){
-        return CalculateAttribute(PokemonBase.Attack, 0);
+    public int GetAttack(bool isSpecial){
+        return CalculateAttribute(isSpecial? PokemonBase.SpecialAttack : PokemonBase.Attack, 0);
     }
 
-    public int GetDefence()
+    public int GetDefence(bool isSpecial)
     {
-        return CalculateAttribute(PokemonBase.Defence, 0);
+        return CalculateAttribute(isSpecial ? PokemonBase.SpecialDefence : PokemonBase.Defence, 0);
     }
 
     public int GetSpecialAttack()
@@ -73,9 +77,10 @@ public class Pokemon
 
     public float RemainingHp(FightMove fightMove, Pokemon pokemon, float critical, float effectivness)
     {
+        bool isSpecialAttack = fightMove.Base.IsSpecial();
         float modifiers = Random.Range(0.85f, 1f) * effectivness * critical;
         float attack = (2 * pokemon.Level + 10) / 250f;
-        float defence = attack * (float)fightMove.Base.Power * ((float)pokemon.GetAttack() / (float)GetDefence()) + 2;
+        float defence = attack * (float)fightMove.Base.Power * ((float)pokemon.GetAttack(isSpecialAttack) / (float)GetDefence(isSpecialAttack)) + 2;
         int damage = Mathf.FloorToInt(defence * modifiers);
 
         if(fightMove.Base.Power == 0) damage = 0;
