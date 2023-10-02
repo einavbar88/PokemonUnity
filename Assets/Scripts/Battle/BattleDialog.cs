@@ -6,7 +6,7 @@ using TMPro;
 public enum SelectionMode { PreBattle, InBattle}
 
 public class BattleDialog : MonoBehaviour
-{
+{   
     [SerializeField] TextMeshProUGUI dialog;
     [SerializeField] GameObject battleOptions;
     [SerializeField] GameObject fightMoves;
@@ -19,7 +19,7 @@ public class BattleDialog : MonoBehaviour
 
     public void Set(string dialog)
     {
-        this.dialog.text = dialog;
+        this.dialog.text = dialog; 
     }
 
     public IEnumerator TypeText(string text)

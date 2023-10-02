@@ -6,14 +6,12 @@ using DG.Tweening;
 
 public class BattleVisuals : MonoBehaviour
 {
-    [SerializeField] Base pokemonBase;
-    [SerializeField] int level;
     [SerializeField] bool isPlayer;
 
     public Pokemon Pokemon { get; set; }
 
     Image pokemonSprite;
-    Vector2 originalPosition;
+    Vector2 originalPosition; 
     Color originalColor;
 
     private void Awake()
@@ -23,13 +21,14 @@ public class BattleVisuals : MonoBehaviour
         originalColor = pokemonSprite.color;
     }
 
-    public void Set()
+    public void Set(Pokemon pokemon)
     {
-        Pokemon = new Pokemon(pokemonBase, level);
-        if (isPlayer) pokemonSprite.sprite = Pokemon.PokemonBase.back;
-        else pokemonSprite.sprite = Pokemon.PokemonBase.front;
+        Pokemon = pokemon;
+        if (isPlayer) pokemonSprite.sprite = pokemon.PokemonBase.back;
+        else pokemonSprite.sprite = pokemon.PokemonBase.front;
+        pokemonSprite.color = originalColor;
         EnterAnimation();
-    }
+    } 
 
     public void EnterAnimation()
     {
@@ -58,6 +57,13 @@ public class BattleVisuals : MonoBehaviour
         sequence.Append(pokemonSprite.DOColor(originalColor, 0.1f));
         sequence.Append(pokemonSprite.DOColor(Color.gray, 0.1f));
         sequence.Append(pokemonSprite.DOColor(originalColor, 0.1f));
+    }
+
+    public void FaintAnimation()
+    {
+        var sequence = DOTween.Sequence();
+        sequence.Append(pokemonSprite.transform.DOLocalMoveY(originalPosition.y - 50f, 0.5f));
+        sequence.Join(pokemonSprite.DOFade(0f, 0.5f));
     }
 }
 
