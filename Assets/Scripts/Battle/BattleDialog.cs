@@ -17,6 +17,8 @@ public class BattleDialog : MonoBehaviour
     [SerializeField] TextMeshProUGUI pp;
     [SerializeField] TextMeshProUGUI type;
 
+    public bool IsTyping { get; set; }
+
     public void Set(string dialog)
     {
         this.dialog.text = dialog; 
@@ -24,12 +26,15 @@ public class BattleDialog : MonoBehaviour
 
     public IEnumerator TypeText(string text)
     {
+        IsTyping = true;
         dialog.text = "";
         foreach(char letter in text)
         {
             dialog.text += letter;
             yield return new WaitForSeconds(1f / 30);
         }
+        IsTyping = false;
+        yield return new WaitForSeconds(1f);
         yield return WaitForKeyDown.Key(KeyCode.Space);
     }
 

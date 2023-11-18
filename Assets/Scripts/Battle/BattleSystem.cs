@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public enum BattleState { Start, BattleOptions, FightMoves, Opponent, Busy };
+
+public enum BattleState { Start, BattleOptions, ChoosePokemon, FightMoves, Opponent, Busy };
 
 public class BattleSystem : MonoBehaviour
 {
@@ -13,19 +15,40 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] BattleText opponentPokemonText;
     [SerializeField] BattleDialog battleDialog;
     [SerializeField] ChoosePokemonScript choosePokemon;
+    [SerializeField] Image opponentTrainer;
 
     public event Action<bool> OnEndOfBattle;
 
     PokemonsOwned playerPokemons;
+    PokemonsOwned opponentPokemons;
     Pokemon wildPokemon;
+
+    Player player;
+    Trainer opponent;
+    bool isWildPokemon;
 
     BattleState state;
     int[] currentSelection = { 0, 0 };
+    int[] newPokemonSelection = { 0, 0 };
+
 
     public void StartBattle(PokemonsOwned playerPokemons, Pokemon wildPokemon)
     {
         this.playerPokemons = playerPokemons;
         this.wildPokemon = wildPokemon;
+        isWildPokemon = true;
+        StartCoroutine(SetupBattle());
+    }
+
+    public void StartBattle(PokemonsOwned playerPokemons, PokemonsOwned opponentPokemons)
+    {
+        this.playerPokemons = playerPokemons;
+        this.opponentPokemons = opponentPokemons;
+        isWildPokemon = false;
+
+        player = playerPokemons.GetComponent<Player>();
+        opponent = opponentPokemons.GetComponent<Trainer>();
+
         StartCoroutine(SetupBattle());
     }
 
@@ -34,29 +57,45 @@ public class BattleSystem : MonoBehaviour
         switch (state)
         {
             case BattleState.BattleOptions:
-                HandleSelection(SelectionMode.PreBattle);
+                HandleMoveSelection(SelectionMode.PreBattle);
                 break;
             case BattleState.FightMoves:
-                HandleSelection(SelectionMode.InBattle);
+                HandleMoveSelection(SelectionMode.InBattle);
+                break;
+            case BattleState.ChoosePokemon:
+                HandleChoosePokemon();
                 break;
             default:
                 break;
         }
     }
-
+   
     public IEnumerator SetupBattle()
     {
         playerPokemon.Set(playerPokemons.GetNotFaintedPokemon());
         playerPokemonText.Set(playerPokemon.Pokemon);
-        opponentPokemon.Set(wildPokemon);
-        opponentPokemonText.Set(opponentPokemon.Pokemon);
-        choosePokemon.Init();
+        if (isWildPokemon)
+        {
+            opponentPokemon.Set(wildPokemon);
+            opponentPokemonText.Set(opponentPokemon.Pokemon);
+            choosePokemon.Init();
 
-        battleDialog.dialogSwitch(true);
-        battleDialog.SetMovesText(playerPokemon.Pokemon.FightMoves);
-        battleDialog.SetTypeAndPP(playerPokemon.Pokemon.FightMoves[0]);
+            battleDialog.dialogSwitch(true);
+            battleDialog.SetMovesText(playerPokemon.Pokemon.FightMoves);
+            battleDialog.SetTypeAndPP(playerPokemon.Pokemon.FightMoves[0]);
 
-        yield return battleDialog.TypeText($"A wild {opponentPokemon.Pokemon.PokemonBase.Name} appeared!");
+            yield return battleDialog.TypeText($"A wild {opponentPokemon.Pokemon.PokemonBase.Name} appeared!");
+        } else
+        {
+            opponentPokemon.gameObject.SetActive(false);
+            opponentTrainer.gameObject.SetActive(true);
+
+            opponentTrainer.sprite = opponent.TrainerSprite;
+
+            yield return battleDialog.TypeText(opponent.PreBattleText);
+
+        }
+        
         yield return WaitForKeyDown.Key(KeyCode.Space);
         yield return BattleOptions();
 
@@ -102,7 +141,7 @@ public class BattleSystem : MonoBehaviour
         BattleVisuals attackingPokemonVisual = isPlayerTurn ? playerPokemon : opponentPokemon;
         BattleVisuals defendingPokemonVisual = isPlayerTurn ? opponentPokemon : playerPokemon;
 
-        int selectedMove = GetSelectedOption();
+        int selectedMove = GetSelectedOption(currentSelection);
         var fightMove = isPlayerTurn ? attackingPokemon.FightMoves[selectedMove] : attackingPokemon.GetRandomFightMove();
 
         var battleText = isPlayerTurn ? opponentPokemonText: playerPokemonText;
@@ -145,12 +184,7 @@ public class BattleSystem : MonoBehaviour
             var nextPokemon = playerPokemons.GetNotFaintedPokemon();
             if(nextPokemon != null)
             {
-                playerPokemon.Set(nextPokemon);
-                playerPokemonText.Set(nextPokemon);
-
-                battleDialog.SetMovesText(nextPokemon.FightMoves);
-                yield return battleDialog.TypeText($"{nextPokemon.PokemonBase.Name} Tag in!");
-                yield return BattleOptions();
+                ChoosePokemonScreen();
             }
             else
             {
@@ -165,7 +199,7 @@ public class BattleSystem : MonoBehaviour
         }
     }
    
-    void HandleSelection(SelectionMode selectionMode)
+    void HandleMoveSelection(SelectionMode selectionMode)
     {     
         if (Input.anyKeyDown)
         {
@@ -174,7 +208,7 @@ public class BattleSystem : MonoBehaviour
             else if (Input.GetKeyDown(KeyCode.LeftArrow)) currentSelection[1] = 0;
             else if (Input.GetKeyDown(KeyCode.RightArrow)) currentSelection[1] = 1;
 
-            int selected = GetSelectedOption();
+            int selected = GetSelectedOption(currentSelection);
 
             battleDialog.UpdateSelection(selected, selectionMode);
             if (selectionMode == SelectionMode.InBattle)
@@ -190,6 +224,7 @@ public class BattleSystem : MonoBehaviour
             }
             try
             {
+                if (battleDialog.IsTyping) return;
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
                     if (selectionMode == SelectionMode.PreBattle)
@@ -200,7 +235,8 @@ public class BattleSystem : MonoBehaviour
                                 battleDialog.fightMovesSwitch(true);
                                 FightMoves();
                                 break;
-                            case 1: 
+                            case 1:
+                                battleDialog.dialogSwitch(true);
                                 ChoosePokemonScreen();
                                 break;
                             case 2:
@@ -237,24 +273,110 @@ public class BattleSystem : MonoBehaviour
 
     void ChoosePokemonScreen()
     {
+        state = BattleState.ChoosePokemon;
         choosePokemon.Set(playerPokemons.Pokemons);
         choosePokemon.gameObject.SetActive(true);
     }
 
-    int GetSelectedOption()
+    int GetSelectedOption(int[] selection)
     {
-        switch (currentSelection[0])
+        switch (selection[0])
         {
             case 0:
-                if (currentSelection[1] == 0) return 0;
+                if (selection[1] == 0) return 0;
                 else return 2;
             case 1:
-                if (currentSelection[1] == 0) return 1;
+                if (selection[1] == 0) return 1;
                 else  return 3;
             default:
                 return 0;
         }
     }
 
-   
+    void HandleChoosePokemon()
+    {
+        if (Input.anyKeyDown)
+        {
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                if(playerPokemons.Pokemons.Count > 2)
+                {
+                    newPokemonSelection[1] = 0;
+                }
+            }
+            else if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                if (playerPokemons.Pokemons.Count > 2)
+                {
+                    newPokemonSelection[1] = 1;
+                }
+            }
+            else if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                newPokemonSelection[0] = 0;
+            }
+            else if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                newPokemonSelection[0] = 1;
+            }
+
+            int selected = GetSelectedOption(newPokemonSelection);
+            choosePokemon.UpdateSelection(selected);
+
+            try
+            {
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    var selectedPokemon = playerPokemons.Pokemons[GetSelectedOption(newPokemonSelection)];
+                    if (selectedPokemon.HP <= 0)
+                    {
+                        choosePokemon.SetText("Pokemon is fainted!");
+                        return;
+                    }
+                    if (selectedPokemon == playerPokemon.Pokemon)
+                    {
+                        choosePokemon.SetText("Pokemon is already out!");
+                        return;
+                    }
+
+                    choosePokemon.gameObject.SetActive(false);
+                    state = BattleState.Busy;
+                    StartCoroutine(SwitchPokemon(selectedPokemon));
+                }
+                else if (Input.GetKeyDown(KeyCode.Z))
+                {
+                    if (playerPokemon.Pokemon.HP > 0)
+                    {
+                        choosePokemon.gameObject.SetActive(false);
+                        StartCoroutine(BattleOptions());
+                    }
+                    else
+                    {
+                        choosePokemon.SetText("You must choose a pokemon!");
+                    }
+                }
+            }
+            catch { }
+        }
+
+    }
+
+    IEnumerator SwitchPokemon(Pokemon pokemon)
+    {
+        if(playerPokemon.Pokemon.HP > 0)
+        {
+            yield return battleDialog.TypeText($"{playerPokemon.Pokemon.PokemonBase.Name} come back!");
+            playerPokemon.FaintAnimation();
+            yield return new WaitForSeconds(2f);
+        }
+
+        playerPokemon.Set(pokemon);
+        playerPokemonText.Set(pokemon);
+        battleDialog.SetMovesText(pokemon.FightMoves);
+
+        yield return battleDialog.TypeText($"Go {pokemon.PokemonBase.Name}!");
+
+        StartCoroutine(OpponentMove());
+    }
 }
+

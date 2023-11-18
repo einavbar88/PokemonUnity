@@ -24,4 +24,10 @@ public class BattleText : MonoBehaviour
     {
         yield return pokemonHp.BarAnimation(remainingHp / pokemon.GetMaxHp());
     }
+
+    public void SetSelected(bool isSelected) 
+    {
+        if (isSelected) pokemonName.color = new Color(0.1294f, 0.588f, 0.953f, 1);
+        else pokemonName.color = Color.black;
+    }
 }
