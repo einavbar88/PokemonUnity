@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum GameState { OpenWorld, Battle, Dialog, Cutscene }
+public enum GameState { OpenWorld, Battle, Dialog }
 
 public class GameController : MonoBehaviour 
 {
@@ -15,6 +15,14 @@ public class GameController : MonoBehaviour
     {
         player.OnEncounter += StartBattle;
         battleSystem.OnEndOfBattle += EndBattle;
+        GameObjectsDialogs.Instance.OnOpenDialog += () =>
+        {
+            state = GameState.Dialog;
+        };
+        GameObjectsDialogs.Instance.OnCloseDialog += () =>
+        {
+            if(state == GameState.Dialog) state = GameState.OpenWorld;
+        };
     }
 
     void Update()
@@ -28,8 +36,7 @@ public class GameController : MonoBehaviour
                 battleSystem.HandleUpdate();
                 break;
             case GameState.Dialog:
-                break;
-            case GameState.Cutscene:
+                GameObjectsDialogs.Instance.HandleUpdate();
                 break;
             default:
                 break;
@@ -53,6 +60,5 @@ public class GameController : MonoBehaviour
         battleSystem.gameObject.SetActive(false);
         playerCamera.gameObject.SetActive(true);
         player.IsMovingEnabled = true;
-
     }
 }

@@ -14,12 +14,14 @@ public class Player : MonoBehaviour
     Vector2 moveDirection = Vector2.zero;
     public InputAction playerControls;
 
-    private InputAction move;
-    private InputAction interact;
-
     public LayerMask grassLayer;
+    public LayerMask storyObjects;
+    public LayerMask trainers;
+
 
     public event Action OnEncounter;
+    public event Action OnTrainerEncounter;
+
 
     void Start()
     {
@@ -40,8 +42,6 @@ public class Player : MonoBehaviour
     {
         if (IsMovingEnabled)
         {
-            //float horizontal = Input.GetAxisRaw("Horizontal");
-            //float vertical = Input.GetAxisRaw("Vertical");
             moveDirection = playerControls.ReadValue<Vector2>();
 
             if(moveDirection.sqrMagnitude > 0)
@@ -57,6 +57,10 @@ public class Player : MonoBehaviour
             animator.SetFloat("Horizontal", moveDirection.x);
             animator.SetFloat("Vertical", moveDirection.y);
             animator.SetFloat("Speed", moveDirection.sqrMagnitude);
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Interact();
         }
     }
 
@@ -84,10 +88,39 @@ public class Player : MonoBehaviour
     {
         if (Physics2D.OverlapCircle(transform.position, 0.2f, grassLayer) != null)
         {
-            float encounter = UnityEngine.Random.Range(1, 101);
-            if (encounter < 3)
+            float encounter = UnityEngine.Random.Range(1, 1001);
+            if (encounter < 15)
             {
                 OnEncounter();
+            }
+        }
+    }
+
+    void Interact()
+    {
+        var dir = new Vector3(idleDirection.x, idleDirection.y);
+        var interactingTile = transform.position + dir;
+        var overlapingTile = Physics2D.OverlapCircle(interactingTile, 0.1f, storyObjects);
+        if (overlapingTile != null)
+        {
+            var storyObject = overlapingTile.GetComponent<StoryObjects>();
+            if (storyObject != null) {
+                StartCoroutine(storyObject.Interact());
+            }
+        }
+    }
+
+    private void CheckForTrainerEncounters()
+    {
+        var dir = new Vector3(idleDirection.x, idleDirection.y);
+        var interactingTile = transform.position + dir;
+        var overlapingTile = Physics2D.OverlapCircle(interactingTile, 0.1f, trainers);
+        if (overlapingTile != null)
+        {
+            var trainer = overlapingTile.GetComponent<Trainer>();
+            if (trainer != null)
+            {
+                StartCoroutine(trainer.Interact());
             }
         }
     }
