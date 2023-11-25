@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 570c95c1c1fe24549867fcb4da6a678b, type: 3}
+  m_Name: Spearow
+  m_EditorClassIdentifier: 
+  pokemonName: Spearow
+  description: 
+  front: {fileID: 21300000, guid: 45cb10df13a5b4fc784105a685d4baa7, type: 3}
+  back: {fileID: 21300000, guid: 23834674fe9884ab99a1836a8c38700c, type: 3}
+  mainType: 9
+  secondaryType: 0
+  maxHp: 40
+  attack: 60
+  defence: 30
+  specialAttack: 31
+  specialDefence: 31
+  speed: 70
+  xpGiven: 58
+  growthRate: 1
+  learnableFightMoves:
+  - baseFightMoves: {fileID: 11400000, guid: 9640528ba45fd4a5584a4177f9180efb, type: 2}
+    level: 1
+  - baseFightMoves: {fileID: 11400000, guid: 4afce62736fea4ec6a724a0b720f8433, type: 2}
+    level: 1
+  - baseFightMoves: {fileID: 11400000, guid: 8a3b786fa3dfa457bafe45a4ee30f5af, type: 2}
+    level: 5
+  - baseFightMoves: {fileID: 11400000, guid: 39cd34fa739a947e2b58c29c858cb22e, type: 2}
+    level: 9

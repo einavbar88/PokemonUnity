@@ -6,6 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+    path: Assets/Scenes/Office.unity
+    guid: 578fd658516a740ceac0ea3362bbf4c9
+  - enabled: 1
+    path: Assets/Scenes/OfficeTown.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/PokeCenter.unity
+    guid: bfaaa09b7511e45ea8da3d38211c5898
+  - enabled: 1
+    path: Assets/Scenes/OutOfTown.unity
+    guid: d325b6d1872c04f4c8407c58ccd1e86b
   m_configObjects: {}

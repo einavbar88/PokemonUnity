@@ -28,7 +28,7 @@ public class BattleVisuals : MonoBehaviour
         else pokemonSprite.sprite = pokemon.PokemonBase.front;
         pokemonSprite.color = originalColor;
         EnterAnimation();
-    } 
+    }
 
     public void EnterAnimation()
     {

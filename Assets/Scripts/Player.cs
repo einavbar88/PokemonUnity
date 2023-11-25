@@ -14,14 +14,11 @@ public class Player : MonoBehaviour
     Vector2 moveDirection = Vector2.zero;
     public InputAction playerControls;
 
-    public LayerMask grassLayer;
-    public LayerMask storyObjects;
-    public LayerMask trainers;
-
+    [SerializeField] LayerMask grassLayer;
+    [SerializeField] LayerMask storyObjects;
+    [SerializeField] LayerMask sceneSwitch;
 
     public event Action OnEncounter;
-    public event Action OnTrainerEncounter;
-
 
     void Start()
     {
@@ -94,6 +91,11 @@ public class Player : MonoBehaviour
                 OnEncounter();
             }
         }
+        else if(Physics2D.OverlapCircle(transform.position, 0.2f, sceneSwitch) != null)
+        {
+            SceneSwitchers portal = Physics2D.OverlapCircle(transform.position, 0.2f, sceneSwitch).GetComponent<SceneSwitchers>();
+            if(portal) portal.OnEnter(this);
+        }
     }
 
     void Interact()
@@ -104,24 +106,16 @@ public class Player : MonoBehaviour
         if (overlapingTile != null)
         {
             var storyObject = overlapingTile.GetComponent<StoryObjects>();
-            if (storyObject != null) {
-                StartCoroutine(storyObject.Interact());
+            var trainer = overlapingTile.GetComponent<Trainer>();
+            if (storyObject != null)
+            {
+                StartCoroutine(storyObject.Interact(this));
+            }
+            else if(trainer != null)
+            {
+                StartCoroutine(trainer.Interact(this));
             }
         }
     }
 
-    private void CheckForTrainerEncounters()
-    {
-        var dir = new Vector3(idleDirection.x, idleDirection.y);
-        var interactingTile = transform.position + dir;
-        var overlapingTile = Physics2D.OverlapCircle(interactingTile, 0.1f, trainers);
-        if (overlapingTile != null)
-        {
-            var trainer = overlapingTile.GetComponent<Trainer>();
-            if (trainer != null)
-            {
-                StartCoroutine(trainer.Interact());
-            }
-        }
-    }
 }

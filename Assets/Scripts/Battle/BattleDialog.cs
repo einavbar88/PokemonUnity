@@ -35,7 +35,6 @@ public class BattleDialog : MonoBehaviour
         }
         IsTyping = false;
         yield return new WaitForSeconds(1f);
-        yield return WaitForKeyDown.Key(KeyCode.Space);
     }
 
     public void dialogSwitch(bool isEnaled)
@@ -49,18 +48,18 @@ public class BattleDialog : MonoBehaviour
         }
     }
 
-    public void battleOptionsSwitch(bool isEnaled)
+    public void battleOptionsSwitch(bool isEnaled, int selected)
     {
         battleOptions.SetActive(isEnaled);
-        UpdateSelection(0, SelectionMode.PreBattle);
+        UpdateSelection(selected, SelectionMode.PreBattle);
     }
 
 
-    public void fightMovesSwitch(bool isEnaled)
+    public void fightMovesSwitch(bool isEnaled, int selected)
     {
         fightMoves.SetActive(isEnaled);
         moveDescription.SetActive(isEnaled);
-        UpdateSelection(0, SelectionMode.InBattle);
+        UpdateSelection(selected, SelectionMode.InBattle);
     }
 
     public void UpdateSelection(int selected, SelectionMode selectionMode)

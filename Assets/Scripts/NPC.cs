@@ -5,14 +5,31 @@ using UnityEngine;
 public class NPC : MonoBehaviour, StoryObjects
 {
     [SerializeField] Dialog dialog;
+    [SerializeField] Pokemon pokemon;
+    [SerializeField] bool isPokemon;
+    [SerializeField] bool isNurse;
 
-    public IEnumerator Interact()
+    public IEnumerator Interact(Player player)
     {
         yield return StartCoroutine(GameObjectsDialogs.Instance.Open(dialog));
-        if(this.name == "Squirtle-NPC")
+        if (isNurse)
         {
-            this.gameObject.SetActive(false);
-
+            List<Pokemon> pokemonsToHeal = player.GetComponent<PokemonsOwned>().Pokemons;
+            foreach (Pokemon pokemon in pokemonsToHeal)
+            {
+                pokemon.Heal(1);
+            }
         }
+        if (isPokemon)
+        {
+            JoinCrew(pokemon, player);
+        }
+    }
+
+    public void JoinCrew(Pokemon pokemon, Player player)
+    {
+        pokemon.Init();
+        player.GetComponent<PokemonsOwned>().AddPokemon(pokemon);
+        this.gameObject.SetActive(false);
     }
 }

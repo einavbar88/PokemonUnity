@@ -23,4 +23,9 @@ public class PokemonsOwned : MonoBehaviour
         }
         return null;
     }
+
+    public void AddPokemon(Pokemon pokemon)
+    {
+        pokemons.Add(pokemon);
+    }
 }

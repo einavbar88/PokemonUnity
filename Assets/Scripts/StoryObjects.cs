@@ -2,5 +2,5 @@ using System.Collections;
 
 public interface StoryObjects
 {
-    IEnumerator Interact();
+    IEnumerator Interact(Player player);
 }

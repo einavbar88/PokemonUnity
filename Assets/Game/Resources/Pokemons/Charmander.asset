@@ -24,10 +24,12 @@ MonoBehaviour:
   specialAttack: 60
   specialDefence: 50
   speed: 65
+  xpGiven: 65
+  growthRate: 2
   learnableFightMoves:
   - baseFightMoves: {fileID: 11400000, guid: 82dd4e94b2a014913a39641e3f727bba, type: 2}
     level: 1
-  - baseFightMoves: {fileID: 11400000, guid: c138d24f0b21648d58f285130fbef247, type: 2}
-    level: 4
+  - baseFightMoves: {fileID: 11400000, guid: 9640528ba45fd4a5584a4177f9180efb, type: 2}
+    level: 1
   - baseFightMoves: {fileID: 11400000, guid: e906751fba6ae47f799b1c4dfdf42aca, type: 2}
     level: 7

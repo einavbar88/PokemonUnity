@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum GrowthRate { Fast, MediumFast, MediumSlow, Slow }
+
 [CreateAssetMenu(fileName = "Pokemon", menuName = "Pokemon/Create New Pokemon")] 
 
 public class Base : ScriptableObject
@@ -22,6 +24,9 @@ public class Base : ScriptableObject
     [SerializeField] int specialAttack;
     [SerializeField] int specialDefence;
     [SerializeField] int speed;
+    [SerializeField] int xpGiven;
+    [SerializeField] GrowthRate growthRate;
+
 
     [SerializeField] List<LearnableMoves> learnableFightMoves;
 
@@ -32,7 +37,9 @@ public class Base : ScriptableObject
     public int Defence { get { return defence; } }
     public int SpecialAttack { get { return specialAttack; } }
     public int SpecialDefence { get { return specialDefence; } }
-    public int Speed { get { return speed; } } 
+    public int Speed { get { return speed; } }
+    public int XPGiven { get { return xpGiven; } }
+    public GrowthRate GrowthRate { get { return growthRate; } }
     public List<LearnableMoves> LearnableFightMoves { get { return learnableFightMoves; } }
 }
 

@@ -11,7 +11,7 @@ public class ChoosePokemonScript : MonoBehaviour
 
     public void Init()
     {
-        slots = GetComponentsInChildren<BattleText>();
+        slots = GetComponentsInChildren<BattleText>(true);
     }
 
     public void Set(List<Pokemon> pokemons)
@@ -19,7 +19,11 @@ public class ChoosePokemonScript : MonoBehaviour
         this.pokemons = pokemons;
         for (int i = 0; i < slots.Length; i++)
         {
-            if (i < pokemons.Count) slots[i].Set(pokemons[i]);
+            if (i < pokemons.Count)
+            {
+                slots[i].gameObject.SetActive(true);
+                slots[i].Set(pokemons[i]);
+            }
             else slots[i].gameObject.SetActive(false);
         }
 
