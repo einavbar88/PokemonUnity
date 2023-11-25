@@ -7972,10 +7972,9 @@ GameObject:
   - component: {fileID: 8847780625389580597}
   - component: {fileID: 8847780625389580598}
   - component: {fileID: 8847780625389580599}
-  - component: {fileID: 5664607346205966901}
   m_Layer: 0
   m_Name: PlayerAvatar
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8134,6 +8133,7 @@ MonoBehaviour:
       m_Action: Player Controls
       m_Flags: 8
     m_Flags: 0
+  existingItemsIds: []
   grassLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -8203,20 +8203,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pokemons:
   - pokemonBase: {fileID: 11400000, guid: 34588327a9e924d2f95a7ce2ca8a1e58, type: 2}
-    level: 13
---- !u!114 &5664607346205966901
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8847780625389580595}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4881f89f8b930e34489bbb86116ccd4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uniqueId: 
+    level: 2
 --- !u!1 &8847780625537571719
 GameObject:
   m_ObjectHideFlags: 0

@@ -264,7 +264,8 @@ public class BattleSystem : MonoBehaviour
         }
         else  
         {
-          if(isPlayerTurn) StartCoroutine(OpponentMove());
+          isBattleOver = false;
+          if (isPlayerTurn) StartCoroutine(OpponentMove());
           else yield return BattleOptions();
         }
 

@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     public bool IsMovingEnabled { get; set; }
     Vector2 moveDirection = Vector2.zero;
     public InputAction playerControls;
+    public List<string> existingItemsIds = new();
 
     [SerializeField] LayerMask grassLayer;
     [SerializeField] LayerMask storyObjects;
@@ -102,7 +103,7 @@ public class Player : MonoBehaviour
     {
         var dir = new Vector3(idleDirection.x, idleDirection.y);
         var interactingTile = transform.position + dir;
-        var overlapingTile = Physics2D.OverlapCircle(interactingTile, 0.1f, storyObjects);
+        var overlapingTile = Physics2D.OverlapCircle(interactingTile, 0.25f, storyObjects);
         if (overlapingTile != null)
         {
             var storyObject = overlapingTile.GetComponent<StoryObjects>();
@@ -118,4 +119,15 @@ public class Player : MonoBehaviour
         }
     }
 
+    public bool HasRequiredItems(List<string> requiredItemsId)
+    {
+        foreach(string itemId in requiredItemsId)
+        {
+            if (!existingItemsIds.Exists(id=> id == itemId))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 }

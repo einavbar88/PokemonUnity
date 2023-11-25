@@ -124,6 +124,15 @@ public class Pokemon
     public void Heal(float percentage)
     {
         HP = Mathf.FloorToInt(GetMaxHp() * percentage);
+        ResetPP();
+    }
+
+    public void ResetPP()
+    {
+        foreach(FightMove fightMove in this.FightMoves)
+        {
+            fightMove.PP = fightMove.Base.PP;
+        }
     }
 
     public bool CheckIsLevelUp()
@@ -131,7 +140,9 @@ public class Pokemon
         int levelUpXp = CalculateLevelXp(level + 1);
         if(XP >= levelUpXp)
         {
+            float hpPercentage = (float)HP / this.GetMaxHp();
             level++;
+            HP = Mathf.FloorToInt(this.GetMaxHp() * hpPercentage);
             return true;
         }
         return false;
@@ -153,5 +164,4 @@ public class Pokemon
                 return int.MaxValue;
         }
     }
-
 }

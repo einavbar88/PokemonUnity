@@ -79,6 +79,10 @@ public class GameController : MonoBehaviour
         battleSystem.gameObject.SetActive(false);
         playerCamera.gameObject.SetActive(true);
         player.IsMovingEnabled = true;
+        if (!didPlayerWin)
+        {
+            StartCoroutine(FindObjectOfType<SceneSwitchers>().SpawnInPokeCenter(player));
+        }
     }
 
     public void PauseGame(bool pause)

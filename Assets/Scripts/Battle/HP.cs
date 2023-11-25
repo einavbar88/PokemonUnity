@@ -23,6 +23,6 @@ public class HP : MonoBehaviour
             yield return null;
         }
 
-        hp.transform.localScale = new Vector2(remainingHp, 1f);
+        Set(remainingHp);
     }
 }

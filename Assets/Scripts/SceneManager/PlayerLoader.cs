@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class PlayerLoader : MonoBehaviour
 {
-    [SerializeField] GameObject playerObjectPrefab;
+    [SerializeField] GameObject playerObjects;
+    Vector3 location;
 
-    private void Awake()
+    void Awake()
     {
-        var existing = FindObjectOfType<PlayerObjects>();
-        if(existing == null)
+        location = gameObject.transform.position;
+        PlayerObjects instance = FindObjectOfType<PlayerObjects>();
+        if (instance == null)
         {
-            Instantiate(playerObjectPrefab, new Vector3(13.5f, -7f, 0), Quaternion.identity);
+            Instantiate(playerObjects, location, Quaternion.identity);
         }
     }
 }
