@@ -2847,8 +2847,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 106.2, y: 26.4}
-  m_SizeDelta: {x: 72.01, y: 19.761}
+  m_AnchoredPosition: {x: 86, y: 26.5}
+  m_SizeDelta: {x: 81.33, y: 19.562}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8847780624271694374
 CanvasRenderer:
@@ -8203,7 +8203,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pokemons:
   - pokemonBase: {fileID: 11400000, guid: 34588327a9e924d2f95a7ce2ca8a1e58, type: 2}
-    level: 2
+    level: 14
 --- !u!1 &8847780625537571719
 GameObject:
   m_ObjectHideFlags: 0

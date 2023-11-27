@@ -21,7 +21,7 @@ MonoBehaviour:
   maxHp: 35
   attack: 55
   defence: 40
-  specialAttack: 150
+  specialAttack: 50
   specialDefence: 50
   speed: 90
   xpGiven: 82
@@ -36,4 +36,4 @@ MonoBehaviour:
   - baseFightMoves: {fileID: 11400000, guid: e1d230a3976624f79bc242fea620634e, type: 2}
     level: 13
   - baseFightMoves: {fileID: 11400000, guid: d9a666b45032e4f4f8181d0b5e7a7a5f, type: 2}
-    level: 18
+    level: 15

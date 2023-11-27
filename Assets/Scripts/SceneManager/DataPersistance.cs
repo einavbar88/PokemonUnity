@@ -9,6 +9,7 @@ public static class DataPersistance
         { "TaliaCastleKey", false },
         { "TaliaCastleGate", false },
         { "Talia", false },
+        { "DemoEnd", false }
     };
 
     public static bool Get(string fieldName)

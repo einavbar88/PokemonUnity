@@ -44,6 +44,13 @@ public class SceneSwitchers : MonoBehaviour
         Destroy(gameObject);
     }
 
+    public IEnumerator StartIntro()
+    {
+        DontDestroyOnLoad(gameObject);
+        yield return SceneManager.LoadSceneAsync(7);
+        Destroy(gameObject);
+    }
+
     public IEnumerator StartGame()
     {
         DontDestroyOnLoad(gameObject);
@@ -62,7 +69,7 @@ public class SceneSwitchers : MonoBehaviour
         SceneSwitchers[] destinations = FindObjectsOfType<SceneSwitchers>();
         foreach (SceneSwitchers destination in destinations)
         {
-            if (destination.sceneToLoad == 1 && destination.sceneLoadedFrom == 2)
+            if (destination.sceneToLoad == 2 && destination.sceneLoadedFrom == 3)
             {
                 player.transform.position = destination.spawnPoint.position;
                 break;

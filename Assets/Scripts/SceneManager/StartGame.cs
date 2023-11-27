@@ -11,7 +11,7 @@ public class StartGame : MonoBehaviour
         if (Input.anyKeyDown)
         {
             if (Input.GetKeyDown(KeyCode.Space)){
-                StartCoroutine(sceneSwitcher.StartGame());
+                StartCoroutine(sceneSwitcher.StartIntro());
             }
         }
     }
